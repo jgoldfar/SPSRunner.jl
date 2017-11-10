@@ -30,9 +30,9 @@ function formulateJuMPModel(emplist::EmployeeList, increment::Real = 1, solver =
         inds = empInds[i]
         @constraint(m, sum(x[j] for j = inds) <= numPossible)
     end
-    
+
     @NLexpression(m, J1, sum(weights[i] * x[i] for i = 1:nv))
-    
+
     @NLobjective(m, Max, J1)
 
     m, x, weights, bsl

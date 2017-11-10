@@ -1,5 +1,6 @@
 julia 0.6-
-# SPSBase
 JuMP 0.18.0
 AmplNLWriter 0.4.0
 CoinOptServices 0.2.0
+# GLPK
+# SPSBase

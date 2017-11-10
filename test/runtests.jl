@@ -33,16 +33,16 @@ solver_to_shortname(solver) = basename(solver.solver_command)
         status, x1, weights1 = solveJuMPModel!(JuMPModel, x, weights)
         @test JuMPModel.internalModelLoaded == true
         @test status == :Optimal
-        
+
 
         # Without a constraint, scheduling everyone to work all the time is optimal.
         sumWeights = sum(weights1)
         @test getobjectivevalue(JuMPModel) == sumWeights
         @test all(isapprox(xi, 1) for xi in x1)
 
-        unconstrained_nlp_solver_time[nlp_solver] = JuMP.getsolvetime(JuMPModel) 
+        unconstrained_nlp_solver_time[nlp_solver] = JuMP.getsolvetime(JuMPModel)
     end
-    
+
     @testset "Constrained, solver=$(solver_to_shortname(nlp_solver))" for nlp_solver in nlp_solvers
         nEmployees = 4
         emp2sched = Schedule([(8, 10)], [(0, 0)], [(0, 0)], [(0, 0)], [(0, 0)])
@@ -64,7 +64,7 @@ solver_to_shortname(solver) = basename(solver.solver_command)
         @test status == :Optimal
 
         @test getobjectivevalue(JuMPModel) < sumWeights
-        constrained_nlp_solver_time[nlp_solver] = JuMP.getsolvetime(JuMPModel) 
+        constrained_nlp_solver_time[nlp_solver] = JuMP.getsolvetime(JuMPModel)
     end
 
     @testset "toSchedule" begin
