@@ -7,7 +7,7 @@
 
 SPSRunner.jl uses [SPSBase.jl](https://github.com/jgoldfar/SPSBase.jl), JuMP, and Coin-OR packages to solve the scheduling problem.
 
-Version: v0.1
+Version: v1.0-pre
 
 ## Dependencies/Setup
 
@@ -18,9 +18,6 @@ Version: v0.1
 * Note: On OSX, apparently CoinOptServices does not find the Homebrew-built libraries correctly, so they have to be built from source.
 
 ## Roadmap
-
-### v1.0
-* JuMP formulation and solution of scheduling problems using SPSBase tools
 
 ### v2.0
 * Build preferences and non-overlapping specialty soft constraints into functional calculation
