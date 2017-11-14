@@ -8,6 +8,8 @@ os:
 julia:
   - 0.6
   - 0.7
+  - 1.0
+  - 1.4
   - nightly
 
 ## uncomment the following lines to allow failures on nightly julia
