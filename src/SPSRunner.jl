@@ -51,4 +51,18 @@ function toEmployeeList!(bsl::BitScheduleList, x::Vector{Float64})
     SPSBase.to_sched(bsl)
 end
 
+export formulateJuMPModel
+
+function formulateJuMPModel(emplist::EmployeeList, increment::Real = 1)
+    m = Model(solver = CouenneNLSolver())
+    bsl = BitScheduleList(emplist, increment)
+    nv = length(bsl.vec)
+
+    @variable(m, x[1:nv], Bin)
+    @NLexpression(m, J1, x[1])
+
+    @NLobjective(m, Max, J1)
+    m, bsl
+end
+
 end # module
