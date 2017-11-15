@@ -24,7 +24,7 @@ constrained_nlp_solver_time = Dict(s=>0.0 for s in nlp_solvers)
         )
         schedulingResolution = 1//2
 
-        status, x, bsl = formulateAndSolveJuMPModel(employees, schedulingResolution, nlp_solver)
+        JuMPModel, status, x, weights, bsl = formulateAndSolveJuMPModel(employees, schedulingResolution, nlp_solver)
         @test typeof(JuMPModel) <: JuMP.Model
         @test MathProgBase.numvar(JuMPModel) >= length(bsl.times)
         @test JuMP.getobjectivesense(JuMPModel) == :Max
@@ -49,7 +49,7 @@ constrained_nlp_solver_time = Dict(s=>0.0 for s in nlp_solvers)
         )
         schedulingResolution = 1//2
 
-        status, x, bsl = formulateAndSolveJuMPModel(employees, schedulingResolution, nlp_solver)
+        JuMPModel, status, x, weights, bsl = formulateAndSolveJuMPModel(employees, schedulingResolution, nlp_solver)
         @test typeof(JuMPModel) <: JuMP.Model
         @test MathProgBase.numvar(JuMPModel) >= length(bsl.times)
         @test JuMP.getobjectivesense(JuMPModel) == :Max
