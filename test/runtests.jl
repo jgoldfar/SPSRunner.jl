@@ -24,7 +24,7 @@ solver_to_shortname(solver) = basename(solver.solver_command)
         )
         schedulingResolution = 1//2
 
-        JuMPModel, x, weights, bsl = formulateJuMPModel(employees, schedulingResolution, nlp_solver)
+        status, x, bsl = formulateAndSolveJuMPModel(employees, schedulingResolution, nlp_solver)
         @test typeof(JuMPModel) <: JuMP.Model
         @test MathProgBase.numvar(JuMPModel) >= length(bsl.times)
         @test JuMP.getobjectivesense(JuMPModel) == :Max
@@ -53,7 +53,7 @@ solver_to_shortname(solver) = basename(solver.solver_command)
         )
         schedulingResolution = 1//2
 
-        JuMPModel, x, weights, bsl = formulateJuMPModel(employees, schedulingResolution, nlp_solver)
+        status, x, bsl = formulateAndSolveJuMPModel(employees, schedulingResolution, nlp_solver)
         @test typeof(JuMPModel) <: JuMP.Model
         @test MathProgBase.numvar(JuMPModel) >= length(bsl.times)
         @test JuMP.getobjectivesense(JuMPModel) == :Max
