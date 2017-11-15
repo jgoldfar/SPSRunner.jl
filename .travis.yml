@@ -26,12 +26,12 @@ before_script: # homebrew for mac
   - if [ $TRAVIS_OS_NAME = osx ]; then brew update; fi
   - if [ $TRAVIS_OS_NAME = osx ]; then brew install gcc; fi
 
-cache:
-    directories:
-     - /home/travis/.julia/v0.6/Cbc/deps/usr
-     - /home/travis/.julia/v0.6/Ipopt/deps/usr
-     - /home/travis/.julia/v0.7/Cbc/deps/usr
-     - /home/travis/.julia/v0.7/Ipopt/deps/usr
+# cache:
+#     directories:
+#      - /home/travis/.julia/v0.6/Cbc/deps/usr
+#      - /home/travis/.julia/v0.6/Ipopt/deps/usr
+#      - /home/travis/.julia/v0.7/Cbc/deps/usr
+#      - /home/travis/.julia/v0.7/Ipopt/deps/usr
 
 ## uncomment the following lines to override the default test script
 script:
