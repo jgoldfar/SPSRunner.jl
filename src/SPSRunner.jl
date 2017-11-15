@@ -82,7 +82,7 @@ function formulateAndSolveJuMPModel(emplist::EmployeeList, increment::Real = 1, 
 
     status = solve(m)
 
-    status, getvalue(x), bsl
+    m, status, getvalue(x), getvalue(weights), bsl
 end
 
 end # module

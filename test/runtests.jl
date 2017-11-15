@@ -24,15 +24,12 @@ solver_to_shortname(solver) = basename(solver.solver_command)
         )
         schedulingResolution = 1//2
 
-        status, x, bsl = formulateAndSolveJuMPModel(employees, schedulingResolution, nlp_solver)
+        JuMPModel, status, x, weights, bsl = formulateAndSolveJuMPModel(employees, schedulingResolution, nlp_solver)
         @test typeof(JuMPModel) <: JuMP.Model
         @test MathProgBase.numvar(JuMPModel) >= length(bsl.times)
         @test JuMP.getobjectivesense(JuMPModel) == :Max
-        @test JuMPModel.internalModelLoaded == false
-
-        status, x1, weights1 = solveJuMPModel!(JuMPModel, x, weights)
-        @test JuMPModel.internalModelLoaded == true
         @test status == :Optimal
+        @test JuMPModel.internalModelLoaded == true
 
 
         # Without a constraint, scheduling everyone to work all the time is optimal.
@@ -53,15 +50,12 @@ solver_to_shortname(solver) = basename(solver.solver_command)
         )
         schedulingResolution = 1//2
 
-        status, x, bsl = formulateAndSolveJuMPModel(employees, schedulingResolution, nlp_solver)
+        JuMPModel, status, x, weights, bsl = formulateAndSolveJuMPModel(employees, schedulingResolution, nlp_solver)
         @test typeof(JuMPModel) <: JuMP.Model
         @test MathProgBase.numvar(JuMPModel) >= length(bsl.times)
         @test JuMP.getobjectivesense(JuMPModel) == :Max
-        @test JuMPModel.internalModelLoaded == false
-
-        status, x1, weights1 = solveJuMPModel!(JuMPModel, x, weights)
-        @test JuMPModel.internalModelLoaded == true
         @test status == :Optimal
+        @test JuMPModel.internalModelLoaded == true
 
         @test getobjectivevalue(JuMPModel) < sumWeights
         constrained_nlp_solver_time[nlp_solver] = JuMP.getsolvetime(JuMPModel)
