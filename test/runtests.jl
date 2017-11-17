@@ -80,6 +80,16 @@ solver_to_shortname(solver) = basename(solver.solver_command)
 
         JuMPModel, x, weights, bsl = formulateJuMPModel(employees, schedulingResolution)
 
+        status, x1, weights1 = solveJuMPModel!(JuMPModel, x, weights)
+        @test length(x1) == length(bsl.vec)
+
+        empList1 = toEmployeeList!(bsl, x1)
+        @test length(empList1) == length(employees)
+        # For an unconstrained problem, everyone should be
+        # scheduled during all of their availability.
+        @test all(SPSBase.schedules_isapprox(empList1[i].avail, employees[i].avail) for i in 1:length(empList1))
+    end
+
 end
 
 println("\n## Unconstrained")

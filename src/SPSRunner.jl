@@ -86,7 +86,14 @@ end
 function solveJuMPModel!(m, x, weights)
     status = solve(m)
 
-    m, status, getvalue(x), getvalue(weights), bsl
+    status, getvalue(x), getvalue(weights)
+end
+
+function toEmployeeList!(bsl::BitScheduleList, x::Vector{Float64})
+    for (i, xi) in enumerate(x)
+        bsl.vec[i] = (xi > 0.5)
+    end
+    SPSBase.to_sched(bsl)
 end
 
 end # module
