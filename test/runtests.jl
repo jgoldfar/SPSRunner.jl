@@ -24,12 +24,16 @@ solver_to_shortname(solver) = basename(solver.solver_command)
         )
         schedulingResolution = 1//2
 
-        JuMPModel, status, x, weights, bsl = formulateAndSolveJuMPModel(employees, schedulingResolution, nlp_solver)
+        JuMPModel, x, weights, bsl = formulateJuMPModel(employees, schedulingResolution, nlp_solver)
         @test typeof(JuMPModel) <: JuMP.Model
         @test MathProgBase.numvar(JuMPModel) >= length(bsl.times)
         @test JuMP.getobjectivesense(JuMPModel) == :Max
-        @test status == :Optimal
+        @test JuMPModel.internalModelLoaded == false
+
+        status, x1, weights1 = solveJuMPModel!(JuMPModel, x, weights)
         @test JuMPModel.internalModelLoaded == true
+        @test status == :Optimal
+
 
 
         # Without a constraint, scheduling everyone to work all the time is optimal.
@@ -50,12 +54,15 @@ solver_to_shortname(solver) = basename(solver.solver_command)
         )
         schedulingResolution = 1//2
 
-        JuMPModel, status, x, weights, bsl = formulateAndSolveJuMPModel(employees, schedulingResolution, nlp_solver)
+        JuMPModel, x, weights, bsl = formulateJuMPModel(employees, schedulingResolution, nlp_solver)
         @test typeof(JuMPModel) <: JuMP.Model
         @test MathProgBase.numvar(JuMPModel) >= length(bsl.times)
         @test JuMP.getobjectivesense(JuMPModel) == :Max
-        @test status == :Optimal
+        @test JuMPModel.internalModelLoaded == false
+
+        status, x1, weights1 = solveJuMPModel!(JuMPModel, x, weights)
         @test JuMPModel.internalModelLoaded == true
+        @test status == :Optimal
 
         @test getobjectivevalue(JuMPModel) < sumWeights
         constrained_nlp_solver_time[nlp_solver] = JuMP.getsolvetime(JuMPModel)
@@ -72,16 +79,6 @@ solver_to_shortname(solver) = basename(solver.solver_command)
         schedulingResolution = 1//2
 
         JuMPModel, x, weights, bsl = formulateJuMPModel(employees, schedulingResolution)
-
-        status, x1, weights1 = solveJuMPModel!(JuMPModel, x, weights)
-        @test length(x1) == length(bsl.vec)
-
-        empList1 = toEmployeeList!(bsl, x1)
-        @test length(empList1) == length(employees)
-        # For an unconstrained problem, everyone should be
-        # scheduled during all of their availability.
-        @test all(SPSBase.schedules_isapprox(empList1[i].avail, employees[i].avail) for i in 1:length(empList1))
-    end
 
 end
 
