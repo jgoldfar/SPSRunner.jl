@@ -2,13 +2,13 @@ VERSION >= v"0.4.0-dev+6521" && __precompile__()
 module SPSRunner
 
 using SPSBase
-export Schedule, Employee
+export Schedule, Employee, EmployeeList
 
 using JuMP, AmplNLWriter
 
-export formulateAndSolveJuMPModel
+export formulateJuMPModel, solveJuMPModel!, toEmployeeList!
 
-function formulateAndSolveJuMPModel(emplist::EmployeeList, increment::Real = 1, solver = CouenneNLSolver())
+function formulateJuMPModel(emplist::EmployeeList, increment::Real = 1, solver = CouenneNLSolver())
     m = Model(solver = solver)
     bsl = BitScheduleList(emplist, increment)
     nv = length(bsl.vec)
@@ -35,9 +35,20 @@ function formulateAndSolveJuMPModel(emplist::EmployeeList, increment::Real = 1, 
     
     @NLobjective(m, Max, J1)
 
+    m, x, weights, bsl
+end
+
+function solveJuMPModel!(m, x, weights)
     status = solve(m)
 
-    m, status, getvalue(x), getvalue(weights), bsl
+    status, getvalue(x), getvalue(weights)
+end
+
+function toEmployeeList!(bsl::BitScheduleList, x::Vector{Float64})
+    for (i, xi) in enumerate(x)
+        bsl.vec[i] = (xi > 0.5)
+    end
+    SPSBase.to_sched(bsl)
 end
 
 end # module
