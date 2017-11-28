@@ -7,7 +7,7 @@ else
     using Base.Test
 end
 
-nlp_solvers = [CouenneNLSolver(), BonminNLSolver()]
+nlp_solvers = [AmplNLSolver(CoinOptServices.couenne), AmplNLSolver(CoinOptServices.bonmin)]
 unconstrained_nlp_solver_time = Dict(s=>0.0 for s in nlp_solvers)
 constrained_nlp_solver_time = Dict(s=>0.0 for s in nlp_solvers)
 solver_to_shortname(solver) = basename(solver.solver_command)

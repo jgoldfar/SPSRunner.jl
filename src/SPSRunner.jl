@@ -4,11 +4,11 @@ module SPSRunner
 using SPSBase
 export Schedule, Employee, EmployeeList
 
-using JuMP, AmplNLWriter
+using JuMP, AmplNLWriter, CoinOptServices
 
 export formulateJuMPModel, solveJuMPModel!, toEmployeeList!
 
-function formulateJuMPModel(emplist::EmployeeList, increment::Real = 1, solver = CouenneNLSolver())
+function formulateJuMPModel(emplist::EmployeeList, increment::Real = 1, solver = AmplNLSolver(CoinOptServices.couenne))
     m = Model(solver = solver)
     bsl = BitScheduleList(emplist, increment)
     nv = length(bsl.vec)
